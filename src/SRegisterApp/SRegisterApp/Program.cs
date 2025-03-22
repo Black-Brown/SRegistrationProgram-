@@ -1,12 +1,39 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using SRegisterApp.Data;
-var builder = WebApplication.CreateBuilder(args);
-builder.Services.AddDbContext<SRegisterAppContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("SRegisterAppContext") ?? throw new InvalidOperationException("Connection string 'SRegisterAppContext' not found.")));
+using System.IO;
 
-// Add services to the container.
+var options = new WebApplicationOptions
+{
+    Args = args,
+    WebRootPath = "wwwroot" // Especificamos manualmente la carpeta de archivos estáticos
+};
+
+var builder = WebApplication.CreateBuilder(options);
+
+// Asegurar que la carpeta wwwroot exista
+var wwwrootPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot");
+if (!Directory.Exists(wwwrootPath))
+{
+    Directory.CreateDirectory(wwwrootPath);
+}
+
+// Cargar configuración de appsettings.json
+builder.Configuration.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
+
+// Configurar la base de datos
+builder.Services.AddDbContext<SRegisterAppContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("SRegisterAppContext")
+    ?? throw new InvalidOperationException("Connection string 'SRegisterAppContext' not found.")));
+
+// Agregar servicios al contenedor
 builder.Services.AddControllersWithViews();
+
+builder.WebHost.ConfigureKestrel(options =>
+{
+    options.ListenAnyIP(5000); // Puerto HTTP
+    options.ListenAnyIP(5001, listenOptions => listenOptions.UseHttps()); // Puerto HTTPS
+});
 
 var app = builder.Build();
 
