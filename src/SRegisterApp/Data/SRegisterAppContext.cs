@@ -15,5 +15,6 @@ namespace SRegisterApp.Data
         }
 
         public DbSet<SRegisterApp.Models.Students> Students { get; set; } = default!;
+        public DbSet<SRegisterApp.Models.Professors> Professors { get; set; } = default!;
     }
 }
