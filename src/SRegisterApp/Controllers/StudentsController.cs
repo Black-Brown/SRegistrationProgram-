@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using SRegisterApp.Data;
-using SRegisterApp.Models;
+using SRegisterApp.Data.entitis;
 
 namespace SRegisterApp.Controllers
 {
