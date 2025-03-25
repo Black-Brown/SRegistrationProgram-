@@ -16,5 +16,22 @@ namespace SRegisterApp.Data
 
         public DbSet<SRegisterApp.Models.Students> Students { get; set; } = default!;
         public DbSet<SRegisterApp.Models.Professors> Professors { get; set; } = default!;
+
+        public DbSet<SRegisterApp.Models.Sections> Sections { get; set; } = default!;
+
+        public DbSet<SRegisterApp.Models.StudentSection> StudentSection { get; set; } = default!;
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+            // Relación Uno a Muchos entre Professors y Sections
+            modelBuilder.Entity<Professors>()
+                .HasMany(p => p.Sections)
+                .WithOne(s => s.Profesor)
+                .HasForeignKey(s => s.ProfesorID)
+                .OnDelete(DeleteBehavior.Cascade);
+        }
+
     }
 }
