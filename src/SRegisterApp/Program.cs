@@ -1,4 +1,9 @@
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using SRegisterApp.Data;
 var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddDbContext<SRegisterAppContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("SRegisterAppContext") ?? throw new InvalidOperationException("Connection string 'SRegisterAppContext' not found.")));
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
