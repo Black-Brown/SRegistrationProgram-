@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using SRegisterApp.Domain.entities;
 
-namespace SRegister.Persistence
+namespace SRegisterApp.Persistence
 {
     public class SRegisterAppContext : DbContext
     {

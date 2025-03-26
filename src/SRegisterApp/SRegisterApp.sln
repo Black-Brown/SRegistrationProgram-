@@ -7,7 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SRegisterApp", "SRegisterAp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SRegisterApp.API", "..\SRegisterApp.API\SRegisterApp.API.csproj", "{9598FD8D-BE2C-432B-912B-C4BA9B9957AA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SRegister.Persistence", "..\SRegister.Persistence\SRegister.Persistence.csproj", "{B4DDB427-0312-454A-8B7F-E4CCB103733A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SRegisterApp.Persistence", "..\SRegister.Persistence\SRegisterApp.Persistence.csproj", "{B4DDB427-0312-454A-8B7F-E4CCB103733A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SRegisterApp.Domain", "..\SRegisterApp.Domain\SRegisterApp.Domain.csproj", "{3CB52ED4-9669-46F7-A4AD-AB68EC8D5273}"
 EndProject

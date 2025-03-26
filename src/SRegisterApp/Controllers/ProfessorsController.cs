@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using SRegisterApp.Data;
-using SRegisterApp.Data.entitis;
+using SRegisterApp.Persistence;
+using SRegisterApp.Domain.entities;
 
 namespace SRegisterApp.Controllers
 {

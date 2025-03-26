@@ -1,6 +1,6 @@
 ﻿namespace SRegisterApp.Models
 {
-    public class StudentsModel
+    public class StudentsViewModel
     {
         public int Id { get; set; }
         public string Nombre { get; set; }

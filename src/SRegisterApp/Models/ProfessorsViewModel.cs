@@ -1,8 +1,6 @@
-﻿using static System.Collections.Specialized.BitVector32;
-
-namespace SRegisterApp.Models
+﻿namespace SRegisterApp.Models
 {
-    public class ProfessorsModel
+    public class ProfessorsViewModel
     {
         public int ID { get; set; }
         public string Nombre { get; set; }
