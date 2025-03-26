@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.12.35707.178
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SRegisterApp", "SRegisterApp.csproj", "{CFCE2E8F-F19E-4927-B083-17B8F4493005}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SRegisterApp.Frontend", "SRegisterApp.Frontend.csproj", "{CFCE2E8F-F19E-4927-B083-17B8F4493005}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SRegisterApp.API", "..\SRegisterApp.API\SRegisterApp.API.csproj", "{9598FD8D-BE2C-432B-912B-C4BA9B9957AA}"
 EndProject

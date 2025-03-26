@@ -1,15 +1,23 @@
+using Microsoft.EntityFrameworkCore;
+using SRegisterApp.Persistence;
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+// ?? Registrar el DbContext
+builder.Services.AddDbContext<SRegisterAppContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("SRegisterAppContext") ??
+        throw new InvalidOperationException("Connection string 'SRegisterAppContext' not found.")));
 
+// Agregar controladores
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+
+// Agregar Swagger (si lo estás usando)
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+// Habilitar Swagger en desarrollo
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -17,9 +25,6 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
 app.UseAuthorization();
-
 app.MapControllers();
-
 app.Run();

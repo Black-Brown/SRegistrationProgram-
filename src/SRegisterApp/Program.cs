@@ -1,28 +1,31 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using SRegisterApp.Persistence;
-var builder = WebApplication.CreateBuilder(args);
-builder.Services.AddDbContext<SRegisterAppContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("SRegisterAppContext") ?? throw new InvalidOperationException("Connection string 'SRegisterAppContext' not found.")));
 
-// Add services to the container.
+var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddDbContext<SRegisterAppContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("SRegisterAppContext")
+    ?? throw new InvalidOperationException("Connection string 'SRegisterAppContext' not found.")));
+
+// ✅ Agregar HttpClient al contenedor de dependencias
+builder.Services.AddHttpClient();
+
+// Agregar controladores con vistas
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+// Configurar el pipeline de solicitudes HTTP
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
-
 app.UseRouting();
-
 app.UseAuthorization();
 
 app.MapControllerRoute(

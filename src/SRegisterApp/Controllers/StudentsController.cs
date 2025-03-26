@@ -1,46 +1,36 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Net.Http;
+using System.Net.Http.Json;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using SRegisterApp.Persistence;
-using SRegisterApp.Domain.entities;
+using SRegisterApp.Models;
 
-namespace SRegisterApp.Controllers
+namespace SRegisterApp.Frontend.Controllers
 {
     public class StudentsController : Controller
     {
-        private readonly SRegisterAppContext _context;
+        private readonly HttpClient _httpClient;
 
-        public StudentsController(SRegisterAppContext context)
+        public StudentsController(IHttpClientFactory httpClientFactory)
         {
-            _context = context;
+            _httpClient = httpClientFactory.CreateClient();
+            _httpClient.BaseAddress = new Uri("http://localhost:5199/api/Students"); // ⚠️ Ajusta la URL de la API
         }
 
         // GET: Students
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Students.ToListAsync());
+            var students = await _httpClient.GetFromJsonAsync<List<StudentsViewModel>>("");
+            return View(students);
         }
 
         // GET: Students/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Details(int id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var students = await _context.Students
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (students == null)
-            {
-                return NotFound();
-            }
-
-            return View(students);
+            var student = await _httpClient.GetFromJsonAsync<StudentsViewModel>($"/{id}");
+            if (student == null) return NotFound();
+            return View(student);
         }
 
         // GET: Students/Create
@@ -50,88 +40,47 @@ namespace SRegisterApp.Controllers
         }
 
         // POST: Students/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Nombre,Correo,Matricula")] Students students)
+        public async Task<IActionResult> Create(StudentsViewModel student)
         {
-            if (ModelState.IsValid)
-            {
-                _context.Add(students);
-                await _context.SaveChangesAsync();
+            if (!ModelState.IsValid) return View(student);
+
+            var response = await _httpClient.PostAsJsonAsync("", student);
+            if (response.IsSuccessStatusCode)
                 return RedirectToAction(nameof(Index));
-            }
-            return View(students);
+
+            return View(student);
         }
 
         // GET: Students/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        public async Task<IActionResult> Edit(int id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var students = await _context.Students.FindAsync(id);
-            if (students == null)
-            {
-                return NotFound();
-            }
-            return View(students);
+            var student = await _httpClient.GetFromJsonAsync<StudentsViewModel>($"/{id}");
+            if (student == null) return NotFound();
+            return View(student);
         }
 
         // POST: Students/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Nombre,Correo,Matricula")] Students students)
+        public async Task<IActionResult> Edit(int id, StudentsViewModel student)
         {
-            if (id != students.Id)
-            {
-                return NotFound();
-            }
+            if (id != student.Id) return BadRequest();
 
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(students);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!StudentsExists(students.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
+            var response = await _httpClient.PutAsJsonAsync($"/{id}", student);
+            if (response.IsSuccessStatusCode)
                 return RedirectToAction(nameof(Index));
-            }
-            return View(students);
+
+            return View(student);
         }
 
         // GET: Students/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        public async Task<IActionResult> Delete(int id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var students = await _context.Students
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (students == null)
-            {
-                return NotFound();
-            }
-
-            return View(students);
+            var student = await _httpClient.GetFromJsonAsync<StudentsViewModel>($"/{id}");
+            if (student == null) return NotFound();
+            return View(student);
         }
 
         // POST: Students/Delete/5
@@ -139,19 +88,11 @@ namespace SRegisterApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var students = await _context.Students.FindAsync(id);
-            if (students != null)
-            {
-                _context.Students.Remove(students);
-            }
+            var response = await _httpClient.DeleteAsync($"/{id}");
+            if (response.IsSuccessStatusCode)
+                return RedirectToAction(nameof(Index));
 
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }
-
-        private bool StudentsExists(int id)
-        {
-            return _context.Students.Any(e => e.Id == id);
+            return RedirectToAction(nameof(Delete), new { id });
         }
     }
 }
